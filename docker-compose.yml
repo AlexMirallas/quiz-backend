@@ -5,6 +5,25 @@ services:
       - "5432:5432"
     restart: always
     environment:
-      POSTGRES_DB: quizdb
-      POSTGRES_USER: quizmaster
-      POSTGRES_PASSWORD: quizmasterpass
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    environment:
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+    volumes:
+        - keycloak-data:/opt/keycloak/data
+    ports:
+      - "9090:8080"
+    command:
+      - start-dev
+      - --db=dev-file
+
+
+volumes:
+  keycloak-data:
+    driver: local
